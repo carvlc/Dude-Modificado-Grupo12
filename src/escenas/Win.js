@@ -1,0 +1,27 @@
+class Win extends Phaser.Scene{
+    constructor(){
+        super("Win");
+   
+    }
+    preload(){
+        this.load.audio("sonidoV","/public/sound/victory.mp3");
+        this.load.image('fondoWin','../public/img/winFondo.jpg');
+      
+    }
+    create(){
+        this.sonido= this.sound.add("sonidoV");
+        const soundConfig={
+            volume:0.3,
+            loop:false
+        }
+        this.sonido.play(soundConfig);
+        console.log("ganaste");
+        this.startButton = this.add.image(400,300,"fondoWin").setInteractive();
+        this.startButton.on("pointerdown",()=>{
+            this.sonido.stop(soundConfig);
+            this.scene.start("Menu");
+        });
+    }
+    update(){}
+}
+export default Win;
