@@ -19,7 +19,7 @@ class GameOver extends Phaser.Scene{
         this.startButton = this.add.image(400,300,"fondoLose").setInteractive();
         this.startButton.on("pointerdown",()=>{
             this.sonido.stop(soundConfig);
-            this.scene.start("Inicio");
+            this.scene.start("Menu");
         });
     }
     update(){}
