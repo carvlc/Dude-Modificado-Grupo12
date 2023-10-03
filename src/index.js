@@ -15,6 +15,6 @@ let config = {
             debug: false
         }
     },
-    scene: [Menu, Nivel1, Nivel2,Nivel3 GameOver, Win]
+    scene: [Menu, Nivel1, Nivel2,Nivel3, GameOver, Win]
 };
 let game = new Phaser.Game(config);

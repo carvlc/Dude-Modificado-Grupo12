@@ -89,11 +89,11 @@ class Nivel1 extends Phaser.Scene {
     update() {
 
         if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-400);
+            this.player.setVelocityX(-160);
             this.player.anims.play('left', true);
         }
         else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(400);
+            this.player.setVelocityX(160);
             this.player.anims.play('right', true);
         }
         else {
@@ -102,7 +102,7 @@ class Nivel1 extends Phaser.Scene {
         }
 
         if (this.cursors.up.isDown && this.player.body.touching.down) {
-            this.player.setVelocityY(-550);
+            this.player.setVelocityY(-330);
         }
 
     }
@@ -123,9 +123,9 @@ class Nivel1 extends Phaser.Scene {
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
             this.countBomb++;
-            if (this.countBomb > 2) {
+            if (this.countBomb > 1) {
                 this.countBomb = 0;
-                this.scene.start('Win', { puntaje: this.puntaje })
+                this.scene.start('Nivel2', { puntaje: this.puntaje })
 
             }
         }

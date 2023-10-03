@@ -34,9 +34,10 @@ class Menu extends Phaser.Scene{
 
         this.startButton = this.add.image(400, 500, 'button').setInteractive();
         this.startButton.on('pointerdown', () =>{
+            this.sonido.stop('musica');
             this.sonido.play('comenzar');
             this.scene.start('Nivel1');
-            this.sonido.stop('musica');
+            
         });
     }
 }

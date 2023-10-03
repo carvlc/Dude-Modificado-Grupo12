@@ -3,14 +3,14 @@ class Nivel3 extends Phaser.Scene{
         super("Nivel3");
         this.platforms = null;
         this.scoreText="";
-        this.score=0;
+        this.puntaje=0;
         this.soundConfig={
             volume:1,
             loop:false
         }
     }
     init(data){
-        this.score = data.score;
+        this.puntaje = data.puntaje;
     }
     
     preload(){
@@ -80,7 +80,7 @@ class Nivel3 extends Phaser.Scene{
         this.physics.add.overlap(this.player,this.stars,this.collectStar,null,this);
         this.physics.add.collider(this.stars,this.platforms);
         //puntajes
-        this.scoreText = this.add.text(16,16,"score: 0",{fontSize: "32px",fill: "#000"});
+        this.scoreText = this.add.text(16,16,"puntaje: 0",{fontSize: "32px",fill: "#000"});
         //Para agregar las bombas
         this.bombs = this.physics.add.group();
         this.physics.add.collider(this.bombs, this.platforms);
@@ -127,13 +127,13 @@ class Nivel3 extends Phaser.Scene{
         collectStar(player, star) {
             star.disableBody(true, true);
             this.sonidoEstrella.play(this.soundConfig);
-            this.score +=10;
-            this.scoreText.setText("score: "+this.score);
+            this.puntaje +=10;
+            this.scoreText.setText("puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
                
                 this.scene.start("Win",{
-                    puntaje: this.score
+                    puntaje: this.puntaje
                 });
                
             }
@@ -143,7 +143,7 @@ class Nivel3 extends Phaser.Scene{
             player.setTint(0xff0000);
             player.anims.play('turn');
             //delay antes de finalizar escena
-            this.score=0; 
+            this.puntaje=0; 
          
             this.sonido.play(this.soundConfig);
            this.time.addEvent({
@@ -151,7 +151,7 @@ class Nivel3 extends Phaser.Scene{
                 callbackScope:this,
                 callback:function(){
                     this.scene.start("GameOver",{
-                        puntaje: this.score
+                        puntaje: this.puntaje
                     });
             }
             });
