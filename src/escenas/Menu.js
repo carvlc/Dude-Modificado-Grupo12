@@ -5,9 +5,10 @@ class Menu extends Phaser.Scene{
     }
 
     preload(){
-        this.load.audio('musica', '/public/sound/BGM_02.wav');
-        this.load.image('sky', '/public/img/sky.png');
-        this.load.image('button', '/public/img/boton1.png');
+        this.load.audio('musica', '../public/sound/fondo.mp3');
+        this.load.image('sky', '../public/img/sky.png');
+        this.load.image('button', '../public/img/boton1.png');
+        this.load.audio('comenzar', '../public/sound/game_start.mp3');
     }
 
     create(){
@@ -34,7 +35,9 @@ class Menu extends Phaser.Scene{
 
         this.startButton = this.add.image(400, 500, 'button').setInteractive();
         this.startButton.on('pointerdown', () =>{
+            this.sonido.play('comenzar');
             this.scene.start('Nivel2');
+            this.sonido.stop('musica');
         });
     }
 

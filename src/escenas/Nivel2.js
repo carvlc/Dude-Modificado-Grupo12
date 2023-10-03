@@ -8,15 +8,40 @@ class Nivel2 extends Phaser.Scene{
     }
 
     preload(){
-        this.load.audio('salto', '/public/sound/DM-CGS.wav');
         this.load.image('sky','../public/img/sky.png');
         this.load.image('ground','../public/img/platform.png');
         this.load.image('star', '../public/img/star.png');
         this.load.image('bomb', '../public/img/bomb.png');
         this.load.spritesheet('dude', '../public/img/dude.png' , { frameWidth: 32, frameHeight: 48});
+
+        this.load.audio('recolectar', '../public/sound/recolectar.mp3');
+        this.load.audio('salto', '../public/sound/salto.mp3');
+        this.load.audio('muerte', '../public/sound/muerte.mp3');
+        this.load.audio('musica', '../public/sound/fondo.mp3');
     }
 
     create(){
+
+        this.sonido = this.sound.add('musica');
+        const soundConfig = {
+            volume: 0.3,
+            loop: true
+        }
+        //arranca con un click, pero carga varias veces el contexto
+        // this.sonido.play(soundConfig);
+
+        //con esto solo carga una unica vez
+        if (!this.sound.locked) {
+            // already unlocked so play
+            this.sonido.play(soundConfig)
+        }
+        else {
+            // wait for 'unlocked' to fire and then play
+            this.sound.once(Phaser.Sound.Events.UNLOCKED, () =>{
+                this.sonido.play(soundConfig)
+            })
+        }
+
         this.add.image(400,300, 'sky');
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
@@ -25,7 +50,7 @@ class Nivel2 extends Phaser.Scene{
         this.platforms.create(-100,250, 'ground');
         this.platforms.create(850,250, 'ground');
 
-        // this.add.image(400, 300, 'star');
+        
         this.player = this.physics.add.sprite(100,100,'dude');
 
         this.player.setBounce(0.2);
@@ -102,7 +127,7 @@ class Nivel2 extends Phaser.Scene{
 
         if (this.cursors.up.isDown && this.player.body.touching.down) {
             this.player.setVelocityY(-330);
-           
+            this.sound.play('salto');
         }
 
     }
@@ -112,6 +137,8 @@ class Nivel2 extends Phaser.Scene{
         star.disableBody(true, true);
         this.score += 10;
         this.scoreText.setText('Score: ' + this.score);
+
+        this.sound.play('recolectar');
 
         //Para las bombas
         if (this.stars.countActive(true) === 0) {
@@ -136,8 +163,9 @@ class Nivel2 extends Phaser.Scene{
         this.physics.pause();
         player.setTint(0xff0000);
         player.anims.play('turn');
-        // gameOver = true;
+        this.sound.play('muerte');
         this.scene.start('GameOver');
+        this.sonido.stop('musica');
     }
 
 }
