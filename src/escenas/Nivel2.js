@@ -156,7 +156,7 @@ class Nivel2 extends Phaser.Scene{
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
             this.countBomb++;
-            if (this.countBomb > 1) {
+            if (this.countBomb > 2) {
                 this.countBomb = 0;
                 this.sonido.stop('musica');
                 this.scene.start('Nivel3', { puntaje: this.puntaje })
