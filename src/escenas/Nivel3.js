@@ -22,11 +22,36 @@ class Nivel3 extends Phaser.Scene{
         this.load.image('star','../public/img/star.png');
         this.load.image('bomb','../public/img/bomb.png');
         this.load.spritesheet('dude', '../public/img/dude.png', { frameWidth: 32, frameHeight: 48 });
+
+        this.load.audio('recolectar', '../public/sound/recolectar.mp3');
+        this.load.audio('salto', '../public/sound/salto.mp3');
+        this.load.audio('muerte', '../public/sound/muerte.mp3');
+        this.load.audio('musica', '../public/sound/fondo.mp3');
         
     }
 
     create()
     {
+        this.sonido = this.sound.add('musica');
+        const soundConfig = {
+            volume: 0.3,
+            loop: true
+        }
+        //arranca con un click, pero carga varias veces el contexto
+        // this.sonido.play(soundConfig);
+
+        //con esto solo carga una unica vez
+        if (!this.sound.locked) {
+            // already unlocked so play
+            this.sonido.play(soundConfig)
+        }
+        else {
+            // wait for 'unlocked' to fire and then play
+            this.sound.once(Phaser.Sound.Events.UNLOCKED, () =>{
+                this.sonido.play(soundConfig)
+            })
+        }
+
         this.sonido= this.sound.add("bum");
         this.sonidoEstrella= this.sound.add("A");
         //creamos las paltaformas 
@@ -121,6 +146,7 @@ class Nivel3 extends Phaser.Scene{
           }
           if(this.cursors.up.isDown && this.player.body.touching.down){
             this.player.setVelocityY(-330);
+            this.sound.play('salto');
           }
         }
         //recollectar estrellitas
@@ -131,6 +157,7 @@ class Nivel3 extends Phaser.Scene{
             this.scoreText.setText("puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
+                this.sonido.stop('musica');
                 this.scene.start("Win",{
                     puntaje: this.puntaje
                 });
@@ -142,6 +169,7 @@ class Nivel3 extends Phaser.Scene{
             player.setTint(0xff0000);
             player.anims.play('turn');
             //delay antes de finalizar escena
+            this.sonido.stop('musica');
             this.sonido.play(this.soundConfig);
            this.time.addEvent({
                 delay:900,

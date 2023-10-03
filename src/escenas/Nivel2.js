@@ -158,6 +158,7 @@ class Nivel2 extends Phaser.Scene{
             this.countBomb++;
             if (this.countBomb > 1) {
                 this.countBomb = 0;
+                this.sonido.stop('musica');
                 this.scene.start('Nivel3', { puntaje: this.puntaje })
 
             }
