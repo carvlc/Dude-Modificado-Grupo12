@@ -1,5 +1,6 @@
 import GameOver from "./escenas/GameOver.js";
 import Menu from "./escenas/Menu.js";
+import Nivel3 from "./escenas/Nivel3.js"
 import Nivel2 from "./escenas/Nivel2.js";
 import Nivel1 from "./escenas/Nivel1.js";
 import Win from "./escenas/Win.js";
@@ -14,6 +15,6 @@ let config = {
             debug: false
         }
     },
-    scene: [Menu, Nivel1, Nivel2, GameOver, Win]
+    scene: [Menu, Nivel1, Nivel2,Nivel3 GameOver, Win]
 };
 let game = new Phaser.Game(config);
