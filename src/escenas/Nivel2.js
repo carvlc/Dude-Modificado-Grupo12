@@ -4,9 +4,12 @@ class Nivel2 extends Phaser.Scene{
         super("Nivel2");
         this.platforms = null;
         this.scoreText = "";
-        this.score = 0;
+        this.countBomb = 0;
     }
 
+    init(data){
+        this.puntaje = data.puntaje;
+    }
     preload(){
         this.load.image('sky','../public/img/sky.png');
         this.load.image('ground','../public/img/platform.png');
@@ -21,7 +24,6 @@ class Nivel2 extends Phaser.Scene{
     }
 
     create(){
-
         this.sonido = this.sound.add('musica');
         const soundConfig = {
             volume: 0.3,
@@ -99,7 +101,7 @@ class Nivel2 extends Phaser.Scene{
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
 
         //Para controlar el puntaje
-        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(16, 16, 'puntaje: 0', { fontSize: '32px', fill: '#000' });
         
         //Para agregar las bombas
         this.bombs = this.physics.add.group();
@@ -135,8 +137,8 @@ class Nivel2 extends Phaser.Scene{
     //Colision entre el jugador y las estrellas
     collectStar(player, star) {
         star.disableBody(true, true);
-        this.score += 10;
-        this.scoreText.setText('Score: ' + this.score);
+        this.puntaje += 10;
+        this.scoreText.setText('Score: ' + this.puntaje);
 
         this.sound.play('recolectar');
 
@@ -153,8 +155,12 @@ class Nivel2 extends Phaser.Scene{
             bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            this.countBomb++;
+            if (this.countBomb > 1) {
+                this.countBomb = 0;
+                this.scene.start('Nivel3', { puntaje: this.puntaje })
 
-            //this.scene.start('Nivel1');
+            }
         }
 
     }
@@ -164,7 +170,7 @@ class Nivel2 extends Phaser.Scene{
         player.setTint(0xff0000);
         player.anims.play('turn');
         this.sound.play('muerte');
-        this.scene.start('GameOver');
+        this.scene.start('GameOver', { puntaje: this.puntaje });
         this.sonido.stop('musica');
     }
 
