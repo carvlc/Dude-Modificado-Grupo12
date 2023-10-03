@@ -1,5 +1,6 @@
 import GameOver from "./escenas/GameOver.js";
 import Menu from "./escenas/Menu.js";
+import Nivel2 from "./escenas/Nivel2.js";
 import Nivel1 from "./escenas/Nivel1.js";
 import Win from "./escenas/Win.js";
 let config = {
@@ -9,10 +10,10 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 900 },
+            gravity: { y: 300 },
             debug: false
         }
     },
-    scene: [Menu, Nivel1, GameOver, Win]
+    scene: [Menu, Nivel1, Nivel2, GameOver, Win]
 };
 let game = new Phaser.Game(config);
