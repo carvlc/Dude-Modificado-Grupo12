@@ -32,7 +32,7 @@ class Nivel3 extends Phaser.Scene{
 
     create()
     {
-        this.sonido = this.sound.add('musica');
+        this.sonidom = this.sound.add('musica');
         const soundConfig = {
             volume: 0.3,
             loop: true
@@ -43,7 +43,7 @@ class Nivel3 extends Phaser.Scene{
         //con esto solo carga una unica vez
         if (!this.sound.locked) {
             // already unlocked so play
-            this.sonido.play(soundConfig)
+            this.sonidom.play(soundConfig)
         }
         else {
             // wait for 'unlocked' to fire and then play
@@ -157,7 +157,7 @@ class Nivel3 extends Phaser.Scene{
             this.scoreText.setText("puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
-                this.sonido.stop('musica');
+                this.sonidom.stop('musica');
                 this.scene.start("Win",{
                     puntaje: this.puntaje
                 });
@@ -169,7 +169,7 @@ class Nivel3 extends Phaser.Scene{
             player.setTint(0xff0000);
             player.anims.play('turn');
             //delay antes de finalizar escena
-            this.sonido.stop('musica');
+            this.sonidom.stop('musica');
             this.sonido.play(this.soundConfig);
            this.time.addEvent({
                 delay:900,
