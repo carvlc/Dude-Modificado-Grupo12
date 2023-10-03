@@ -131,7 +131,6 @@ class Nivel3 extends Phaser.Scene{
             this.scoreText.setText("puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
-               
                 this.scene.start("Win",{
                     puntaje: this.puntaje
                 });
@@ -143,16 +142,12 @@ class Nivel3 extends Phaser.Scene{
             player.setTint(0xff0000);
             player.anims.play('turn');
             //delay antes de finalizar escena
-            this.puntaje=0; 
-         
             this.sonido.play(this.soundConfig);
            this.time.addEvent({
                 delay:900,
                 callbackScope:this,
                 callback:function(){
-                    this.scene.start("GameOver",{
-                        puntaje: this.puntaje
-                    });
+                    this.scene.start("GameOver",{puntaje: this.puntaje});
             }
             });
             
