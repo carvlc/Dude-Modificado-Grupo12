@@ -24,8 +24,7 @@ class GameOver extends Phaser.Scene{
             this.sonido.stop(soundConfig);
             this.scene.start("Menu");
         });
-      this.scoreText = this.add.text(200, 550, 'Puntaje: 0', { fontSize: '40px', fill: '#d42068' });
-        this.scoreText.setText('Puntaje: '+this.puntaje);
+      this.scoreText = this.add.text(200, 550, 'Puntaje: ' + this.puntaje, { fontSize: '40px', fill: '#d42068' });
     }
     update(){}
 }

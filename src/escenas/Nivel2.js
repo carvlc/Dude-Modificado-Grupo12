@@ -101,7 +101,7 @@ class Nivel2 extends Phaser.Scene{
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
 
         //Para controlar el puntaje
-        this.scoreText = this.add.text(16, 16, 'puntaje: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(16, 16, 'Puntaje: ' + this.puntaje, { fontSize: '32px', fill: '#000' });
         
         //Para agregar las bombas
         this.bombs = this.physics.add.group();
@@ -138,7 +138,7 @@ class Nivel2 extends Phaser.Scene{
     collectStar(player, star) {
         star.disableBody(true, true);
         this.puntaje += 10;
-        this.scoreText.setText('Score: ' + this.puntaje);
+        this.scoreText.setText('Puntaje: ' + this.puntaje);
 
         this.sound.play('recolectar');
 

@@ -101,8 +101,7 @@ class Nivel1 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
 
         // para controlar el puntaje
-        this.scoreText = this.add.text(16, 16, 'Puntaje: 0', { fontSize: '32px', fill: '#000' });
-        this.scoreText.setText('Puntaje: ' + this.puntaje);
+        this.scoreText = this.add.text(16, 16, 'Puntaje: ' + this.puntaje, { fontSize: '32px', fill: '#000' });
 
         // agregar las bombas
         this.bombs = this.physics.add.group();

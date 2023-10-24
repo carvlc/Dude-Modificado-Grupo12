@@ -26,8 +26,7 @@ class Win extends Phaser.Scene{
             this.scene.start("Menu");
         });
       
-      this.scoreText = this.add.text(200, 100, 'Puntaje: 0', { fontSize: '32px', fill: '#fff' });
-      this.scoreText.setText('Puntaje: ' + this.puntaje);
+      this.scoreText = this.add.text(200, 100, 'Puntaje: '+ this.puntaje, { fontSize: '32px', fill: '#fff' });
     }
     update(){}
 }
