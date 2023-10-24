@@ -105,7 +105,7 @@ class Nivel3 extends Phaser.Scene{
         this.physics.add.overlap(this.player,this.stars,this.collectStar,null,this);
         this.physics.add.collider(this.stars,this.platforms);
         //puntajes
-        this.scoreText = this.add.text(16,16,"puntaje: 0",{fontSize: "32px",fill: "#000"});
+        this.scoreText = this.add.text(16,16,"Puntaje: " + this.puntaje,{fontSize: "32px",fill: "#000"});
         //Para agregar las bombas
         this.bombs = this.physics.add.group();
         this.physics.add.collider(this.bombs, this.platforms);
@@ -154,7 +154,7 @@ class Nivel3 extends Phaser.Scene{
             star.disableBody(true, true);
             this.sonidoEstrella.play(this.soundConfig);
             this.puntaje +=10;
-            this.scoreText.setText("puntaje: "+this.puntaje);
+            this.scoreText.setText("Puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
                 this.sonidom.stop('musica');
