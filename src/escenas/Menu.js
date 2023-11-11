@@ -16,16 +16,10 @@ class Menu extends Phaser.Scene{
             volume: 0.3,
             loop: true
         }
-        //arranca con un click, pero carga varias veces el contexto
-        // this.sonido.play(soundConfig);
-
-        //con esto solo carga una unica vez
         if (!this.sound.locked) {
-            // already unlocked so play
             this.sonido.play(soundConfig)
         }
         else {
-            // wait for 'unlocked' to fire and then play
             this.sound.once(Phaser.Sound.Events.UNLOCKED, () =>{
                 this.sonido.play(soundConfig)
             })
@@ -34,9 +28,9 @@ class Menu extends Phaser.Scene{
 
         this.startButton = this.add.image(400, 500, 'button').setInteractive();
         this.startButton.on('pointerdown', () =>{
-            this.sonido.stop('musica');
-            this.sonido.play('comenzar');
-            this.scene.start('Nivel1');
+            this.comenzar = this.sound.add('comenzar', {volume: 0.1});
+            this.comenzar.play();
+            this.scene.start('Nivel1', {sonido: this.sonido});
             
         });
     }

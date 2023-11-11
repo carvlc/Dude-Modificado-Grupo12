@@ -8,6 +8,11 @@ class Nivel1 extends Phaser.Scene {
         this.puntaje = 0;
     }
 
+    init(data)
+    {
+        this.sonido = data.sonido;
+    }
+
     preload() {
         this.load.image('sky', '../../public/img/sky.png')
         this.load.image('ground', '../../public/img/platform.png')
@@ -18,30 +23,9 @@ class Nivel1 extends Phaser.Scene {
         this.load.audio('recolectar', '../public/sound/recolectar.mp3');
         this.load.audio('salto', '../public/sound/salto.mp3');
         this.load.audio('muerte', '../public/sound/muerte.mp3');
-        this.load.audio('musica', '../public/sound/fondo.mp3');
     }
 
     create() {
-
-        this.sonido = this.sound.add('musica');
-        const soundConfig = {
-            volume: 0.3,
-            loop: true
-        }
-        //arranca con un click, pero carga varias veces el contexto
-        // this.sonido.play(soundConfig);
-
-        //con esto solo carga una unica vez
-        if (!this.sound.locked) {
-            // already unlocked so play
-            this.sonido.play(soundConfig)
-        }
-        else {
-            // wait for 'unlocked' to fire and then play
-            this.sound.once(Phaser.Sound.Events.UNLOCKED, () =>{
-                this.sonido.play(soundConfig)
-            })
-        }
 
         this.puntaje = 0;
         this.add.image(400, 300, 'sky');
@@ -153,8 +137,7 @@ class Nivel1 extends Phaser.Scene {
             this.countBomb++;
             if (this.countBomb > 1) {
                 this.countBomb = 0;
-                this.sonido.stop('musica');
-                this.scene.start('Nivel2', { puntaje: this.puntaje })
+                this.scene.start('Nivel2', { puntaje: this.puntaje, sonido: this.sonido})
 
             }
         }
@@ -166,8 +149,8 @@ class Nivel1 extends Phaser.Scene {
         player.setTint(0xff0000);
         player.anims.play('turn');
         this.sound.play('muerte');
+        this.sonido.stop();
         this.scene.start('GameOver', { puntaje: this.puntaje })
-        this.sonido.stop('musica');
     }
 
 }
