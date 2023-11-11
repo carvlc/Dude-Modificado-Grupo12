@@ -11,6 +11,7 @@ class Nivel3 extends Phaser.Scene{
     }
     init(data){
         this.puntaje = data.puntaje;
+        this.sonidom = data.sonido;
     }
     
     preload(){
@@ -26,32 +27,11 @@ class Nivel3 extends Phaser.Scene{
         this.load.audio('recolectar', '../public/sound/recolectar.mp3');
         this.load.audio('salto', '../public/sound/salto.mp3');
         this.load.audio('muerte', '../public/sound/muerte.mp3');
-        this.load.audio('musica', '../public/sound/fondo.mp3');
         
     }
 
     create()
     {
-        this.sonidom = this.sound.add('musica');
-        const soundConfig = {
-            volume: 0.3,
-            loop: true
-        }
-        //arranca con un click, pero carga varias veces el contexto
-        // this.sonido.play(soundConfig);
-
-        //con esto solo carga una unica vez
-        if (!this.sound.locked) {
-            // already unlocked so play
-            this.sonidom.play(soundConfig)
-        }
-        else {
-            // wait for 'unlocked' to fire and then play
-            this.sound.once(Phaser.Sound.Events.UNLOCKED, () =>{
-                this.sonido.play(soundConfig)
-            })
-        }
-
         this.sonido= this.sound.add("bum");
         this.sonidoEstrella= this.sound.add("A");
         //creamos las paltaformas 
@@ -157,11 +137,10 @@ class Nivel3 extends Phaser.Scene{
             this.scoreText.setText("Puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
-                this.sonidom.stop('musica');
+                this.sonidom.stop();
                 this.scene.start("Win",{
                     puntaje: this.puntaje
-                });
-               
+                }); 
             }
             }
         hitBomb(player, bomb) {
@@ -169,13 +148,14 @@ class Nivel3 extends Phaser.Scene{
             player.setTint(0xff0000);
             player.anims.play('turn');
             //delay antes de finalizar escena
-            this.sonidom.stop('musica');
+            this.sonidom.stop();
             this.sonido.play(this.soundConfig);
            this.time.addEvent({
                 delay:900,
                 callbackScope:this,
                 callback:function(){
                     this.scene.start("GameOver",{puntaje: this.puntaje});
+                    this.sonidom.stop();
             }
             });
             
