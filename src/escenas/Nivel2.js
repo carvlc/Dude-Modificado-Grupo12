@@ -38,6 +38,7 @@ class Nivel2 extends Phaser.Scene{
 
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
+        this.countBomb = 0;
 
         this.anims.create({
             key: 'left',

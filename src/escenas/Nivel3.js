@@ -137,12 +137,13 @@ class Nivel3 extends Phaser.Scene{
             this.scoreText.setText("Puntaje: "+this.puntaje);
             //Para las bombas
             if (this.stars.countActive(true) === 0) {
-                this.sonidom.stop();
-                this.scene.start("Win",{
-                    puntaje: this.puntaje
+                this.scene.start("Nivel4",{
+                    puntaje: this.puntaje,
+                    sonido: this.sonidom
                 }); 
             }
             }
+
         hitBomb(player, bomb) {
             this.physics.pause();
             player.setTint(0xff0000);

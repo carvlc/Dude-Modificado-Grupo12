@@ -1,15 +1,16 @@
-class Nivel1 extends Phaser.Scene {
+class Nivel4 extends Phaser.Scene {
 
     // constructor por defecto
     constructor() {
-        super('Nivel1');
+        super('Nivel4');
         this.platforms = null;
         this.countBomb = 0;
         this.puntaje = 0;
+        this.tiempo = 0;
     }
 
-    init(data)
-    {
+    init(data) {
+        this.puntaje = data.puntaje;
         this.sonido = data.sonido;
     }
 
@@ -19,15 +20,13 @@ class Nivel1 extends Phaser.Scene {
         this.load.image('star', '../../public/img/star.png')
         this.load.image('bomb', '../../public/img/bomb.png')
         this.load.spritesheet('dude', '../../public/img/dude.png', { frameWidth: 32, frameHeight: 48 })
-
+        this.load.spritesheet('corazon', '../../public/img/corazon.png', { frameWidth: 32, frameHeight: 32 })
         this.load.audio('recolectar', '../public/sound/recolectar.mp3');
         this.load.audio('salto', '../public/sound/salto.mp3');
         this.load.audio('muerte', '../public/sound/muerte.mp3');
     }
 
     create() {
-
-        this.puntaje = 0;
         this.add.image(400, 300, 'sky');
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
@@ -36,9 +35,12 @@ class Nivel1 extends Phaser.Scene {
         this.platforms.create(750, 220, 'ground');
 
         // configuracion para el player
-        this.player = this.physics.add.sprite(100, 100, 'dude');
+        this.player = this.physics.add.sprite(100, 450, 'dude');
         this.player.setBounce(0.2);//para que rebote
         this.player.setCollideWorldBounds(true);//para que colicione con los limites del mapa
+
+        this.object = this.physics.add.staticSprite(400, 25, 'corazon');
+        this.tiempo = 15;
         this.countBomb = 0;
 
         // para el movimiento del personaje
@@ -63,6 +65,7 @@ class Nivel1 extends Phaser.Scene {
         });
         // para las coliciones entre los elementos player con las plataformas
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.overlap(this.player, this.object, this.collectObject, null, this);
 
         // para detectar las entradas del jugador a traves del teclado, tambien puede ser mouse
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -70,7 +73,7 @@ class Nivel1 extends Phaser.Scene {
         // ---------- se agregan las estrellas -----------
         this.stars = this.physics.add.group({
             key: 'star',
-            repeat: 5, // cantidad de estrellas
+            repeat: 10, // cantidad de estrellas
             setXY: { x: 12, y: 0, stepX: 70 }//empieza en la posicion x e y , se repite cada 70 en x
         })
 
@@ -88,11 +91,51 @@ class Nivel1 extends Phaser.Scene {
         // para controlar el puntaje
         this.scoreText = this.add.text(16, 16, 'Puntaje: ' + this.puntaje, { fontSize: '32px', fill: '#000' });
 
+        //tiempo
+        this.timeText = this.add.text(16, 50, 'Tiempo: ' + this.tiempo, { fontSize: '32px', fill: '#000' });
+
         // agregar las bombas
         this.bombs = this.physics.add.group();
         this.physics.add.collider(this.bombs, this.platforms);
         this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
+
+        let x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) :
+            Phaser.Math.Between(0, 400);
+        let bomb = this.bombs.create(x, 10, 'bomb');
+        let bomb1 = this.bombs.create(x, 250, 'bomb');
+        let bomb2 = this.bombs.create(x, 450, 'bomb');
+        let bomb3 = this.bombs.create(x, 150, 'bomb');
+        let bomb4 = this.bombs.create(x, 300, 'bomb');
+
+        bomb.setBounce(1);
+        bomb.setCollideWorldBounds(true);
+        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+        bomb1.setBounce(1);
+        bomb1.setCollideWorldBounds(true);
+        bomb1.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+        bomb2.setBounce(1);
+        bomb2.setCollideWorldBounds(true);
+        bomb2.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+        bomb3.setBounce(1);
+        bomb3.setCollideWorldBounds(true);
+        bomb3.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+        bomb4.setBounce(1);
+        bomb4.setCollideWorldBounds(true);
+        bomb4.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+        this.time.addEvent({
+            delay: 1000,
+            loop: true,
+            callback: () => {
+                this.restarTiempo();
+            }
+        })
     }
+
 
 
     // actualizaciones continuas del juego
@@ -117,30 +160,33 @@ class Nivel1 extends Phaser.Scene {
         }
 
     }
+
+    restarTiempo() {
+        this.tiempo--;
+        this.timeText.setText('Tiempo: ' + this.tiempo);
+        if (this.tiempo == 0) {
+            this.sonido.stop();
+            this.sound.play('muerte');
+            this.scene.start("GameOver", {
+                puntaje: this.puntaje
+            });
+        }
+    }
+
+    collectObject(player, object) {
+        object.disableBody(true, true);
+        this.sonido.stop();
+        this.scene.start("Win", {
+            puntaje: this.puntaje
+        });
+    }
+
     // metodo que hace desaparecer a las estrellas y sumar puntaje
     collectStar(player, star) {
         star.disableBody(true, true);
         this.puntaje += 10;
         this.scoreText.setText('Puntaje: ' + this.puntaje);
         this.sound.play('recolectar');
-
-        if (this.stars.countActive(true) === 0) {
-            this.stars.children.iterate(function (child) {
-                child.enableBody(true, child.x, 0, true, true);
-            });
-            let x = (player.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400));
-
-            let bomb = this.bombs.create(x, 16, 'bomb');
-            bomb.setBounce(1);
-            bomb.setCollideWorldBounds(true);
-            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-            this.countBomb++;
-            if (this.countBomb > 1) {
-                this.countBomb = 0;
-                this.scene.start('Nivel2', { puntaje: this.puntaje, sonido: this.sonido})
-
-            }
-        }
     }
 
     // metodo para cuando choca con una bomba
@@ -154,4 +200,4 @@ class Nivel1 extends Phaser.Scene {
     }
 
 }
-export default Nivel1;
+export default Nivel4;
